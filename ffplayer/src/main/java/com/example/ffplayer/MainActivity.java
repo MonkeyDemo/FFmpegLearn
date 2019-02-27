@@ -7,8 +7,8 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     FFSurfaceView surfaceView;
-//    String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
-    String url = "rtsp://admin:admin222@192.168.1.64:554/h264/ch1/sub/av_stream";
+    String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
+//    String url = "rtsp://admin:admin222@192.168.1.64:554/h264/ch1/main/av_stream";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

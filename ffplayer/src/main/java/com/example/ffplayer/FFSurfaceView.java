@@ -1,6 +1,7 @@
 package com.example.ffplayer;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -11,6 +12,7 @@ import android.view.SurfaceView;
  */
 
 public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
+    String mUrl;
     static {
         System.loadLibrary("native-lib");
     }
@@ -38,6 +40,7 @@ public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         this.getHolder().addCallback(this);
     }
     public void startVideo(String url){
+        this.mUrl = url;
         this.start(url);
     }
     public void pauseVideo(){
@@ -52,6 +55,9 @@ public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         setSurface(holder.getSurface());
+        if(!TextUtils.isEmpty(mUrl)){
+            startVideo(mUrl);
+        }
     }
 
     @Override
@@ -61,5 +67,6 @@ public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        stopVideo();
     }
 }

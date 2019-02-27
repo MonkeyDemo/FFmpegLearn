@@ -82,6 +82,40 @@ void render_surface(uint8_t *pixel) {
 
     ANativeWindow_release(mANativeWindow);
 }
+
+/**
+ * 渲染surface
+ * @param pixel
+ */
+void render_surface2(uint8_t *pixel,int linesize) {
+    LOGV("MonkeyDemo:  renderSurface");
+    if (mFlayPause) {
+        return;
+    }
+
+    ANativeWindow_acquire(mANativeWindow);
+//    LOGV("开始渲染");
+    if (0 != ANativeWindow_lock(mANativeWindow, &nwBuffer, NULL)) {
+        LOGV("ANativeWindow_lock() error");
+        return;
+    }
+// 获取stride
+    uint8_t *dst = (uint8_t *) nwBuffer.bits;
+    int dstStride = nwBuffer.stride * 4;
+
+    // 由于window的stride和帧的stride不同,因此需要逐行复制
+    int h;
+    for (h = 0; h < nwBuffer.height; h++) {
+        memcpy(dst + h * dstStride, pixel + h * linesize, linesize);
+    }
+
+    if (0 != ANativeWindow_unlockAndPost(mANativeWindow)) {
+        LOGV("ANativeWindow_unlockAndPost error");
+        return;
+    }
+
+    ANativeWindow_release(mANativeWindow);
+}
 /**
  * 设置渲染宽高
  * @param width
@@ -89,7 +123,7 @@ void render_surface(uint8_t *pixel) {
  * @return
  */
 int32_t set_BuffersGeometry(int32_t width, int32_t height) {
-    int32_t format = WINDOW_FORMAT_RGB_565;
+    int32_t format = WINDOW_FORMAT_RGBA_8888;
 
     if (NULL == mANativeWindow) {
         LOGV("mANativeWindow is NULL.");
@@ -145,7 +179,13 @@ void play(){
 
     LOGD("inputUrl = %s",inputUrl);
     m_iformatCtx = avformat_alloc_context();
-    ret = avformat_open_input(&m_iformatCtx,inputUrl,NULL,NULL);
+    AVDictionary* options = NULL;
+    av_dict_set(&options, "buffer_size", "1024000", 0);
+    av_dict_set(&options, "max_delay", "500000", 0);
+    av_dict_set(&options, "stimeout", "20000000", 0);  //设置超时断开连接时间
+    av_dict_set(&options, "rtsp_transport", "tcp", 0);  //以udp方式打开，如果以tcp方式打开将udp替换为tcp
+
+    ret = avformat_open_input(&m_iformatCtx,inputUrl,NULL,&options);
     if(ret <0){
         char temp[30] = {0};
         av_strerror(ret,temp,30);
@@ -198,14 +238,14 @@ void play(){
         ret = avcodec_decode_video2(m_icondecCtx,pFrame,&got_picture,pPacket);
         if(got_picture == 1){
             uint8_t *dst_data[8];
-            int dst_linesize[8];
-            av_image_alloc(dst_data,dst_linesize,m_icondecCtx->width,m_icondecCtx->height,
-                           AV_PIX_FMT_RGB565,16);
-            img_convert(dst_data,dst_linesize, AV_PIX_FMT_RGB565, (AVPicture *) pFrame,
+            int dst_linesize;
+            av_image_alloc(dst_data,&dst_linesize,m_icondecCtx->width,m_icondecCtx->height,
+                           AV_PIX_FMT_RGBA,16);
+            img_convert(dst_data,&dst_linesize, AV_PIX_FMT_RGBA, (AVPicture *) pFrame,
                         m_icondecCtx->pix_fmt,
                         m_icondecCtx->width,
                         m_icondecCtx->height);
-            render_surface(dst_data[0]);
+            render_surface2(dst_data[0],dst_linesize);
             av_freep(dst_data);
         }
     }
