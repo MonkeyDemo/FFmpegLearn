@@ -232,10 +232,10 @@ JNIEXPORT void JNICALL Java_com_example_ffmplayerplus_FFSurfaceView_capture
 /*
  * Class:     com_example_ffmplayerplus_FFSurfaceView
  * Method:    startRecode
- * Signature: ()V
+ * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_example_ffmplayerplus_FFSurfaceView_startRecode
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_example_ffmplayerplus_FFSurfaceView

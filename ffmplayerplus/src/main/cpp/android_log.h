@@ -10,7 +10,7 @@
 extern "C"{
 #endif
 
-#define LOG_FLAG 1  //日志打印标志 (release版本中将1改为0即可不打印日志)
+#define LOG_FLAG 0  //日志打印标志 (release版本中将1改为0即可不打印日志)
 #define TAG "MonkeyDemo" //日志打印标签
 #if LOG_FLAG
 #define log_print_verbose(...) __android_log_print(ANDROID_LOG_VERBOSE,TAG,__VA_ARGS__)

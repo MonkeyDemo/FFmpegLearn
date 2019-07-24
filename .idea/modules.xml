@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FFmpegLearn.iml" filepath="$PROJECT_DIR$/FFmpegLearn.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ffmplayerplus/ffmplayerplus.iml" filepath="$PROJECT_DIR$/ffmplayerplus/ffmplayerplus.iml" />
       <module fileurl="file://$PROJECT_DIR$/ffplayer/ffplayer.iml" filepath="$PROJECT_DIR$/ffplayer/ffplayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testmemoryshare/testmemoryshare.iml" filepath="$PROJECT_DIR$/testmemoryshare/testmemoryshare.iml" />
     </modules>
   </component>
 </project>

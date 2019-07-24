@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+//apply plugin: 'com.android.library'
 android {
     compileSdkVersion 26
     buildToolsVersion "28.0.3"
@@ -43,6 +43,23 @@ android {
     }
 }
 
+def _BASENAME = "ffbackSdk"
+def _VERSION = "_V1.0"
+def _DestinationPath = "build" //生成jar包的位置
+def zipFile = file('build/intermediates/bundles/default/classes.jar') //待打包文件位置
+//def zipFile = file('build/intermediates/bundles/release/classes.jar')  //3.0以后的位置
+task deleteBuild(type: Delete) {
+    delete _DestinationPath + _BASENAME + _VERSION + ".jar"
+}
+
+task makeJar(type: Jar) {
+    from zipTree(zipFile)
+    from fileTree(dir: 'src/main', includes: ['assets/**']) //将assets目录打入jar包
+    baseName = _BASENAME + _VERSION
+    destinationDir = file(_DestinationPath)
+}
+
+makeJar.dependsOn(deleteBuild, build)
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

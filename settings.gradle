@@ -1,1 +1,1 @@
-include ':app', ':ffplayer'
+include ':app', ':ffplayer', ':ffmplayerplus', ':testmemoryshare'

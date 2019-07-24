@@ -18,7 +18,7 @@ import java.io.File;
 public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
     String mUrl;
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("ffbackSdk");
     }
     public FFSurfaceView(Context context) {
         super(context);
@@ -34,16 +34,16 @@ public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         super(context, attrs, defStyleAttr);
         init();
     }
-    private native void setSurface(Surface holder);
-    private native void start(String url);
-    private native void pause();
-    private native void stop();
-    private native void resume();
-    private native void capture(String picFileName);
-    private native void startRecode();
-    private native void stopRecode();
+    protected native void setSurface(Surface holder);
+    protected native void start(String url);
+    protected native void pause();
+    protected native void stop();
+    protected native void resume();
+    protected native void capture(String picFileName);
+    protected native void startRecode(String mp4FileName);
+    protected native void stopRecode();
 
-    private void init(){
+    protected void init(){
         this.getHolder().addCallback(this);
     }
     public void startVideo(String url){
@@ -61,21 +61,37 @@ public class FFSurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void captureVideo(String picFileName){
-        Log.d("MonkeyDemo","dir = "+picFileName);
+        Log.d("MonkeyDemo","pictureDir = "+picFileName);
         File picFile = new File(picFileName);
         File picDir = picFile.getParentFile();
         if(picDir != null && picDir.exists() && picDir.isDirectory()){
             this.capture(picFileName);
         }else {
-            throw new IllegalArgumentException("传入的文件名不合法!");
+            throw new IllegalArgumentException("传入的图片文件名不合法!");
         }
+    }
+    public void recodeStart(String mp4FileName){
+        Log.d("MonkeyDemo","mp4Dir = "+mp4FileName);
+        File mp4File = new File(mp4FileName);
+        File mp4Dir = mp4File.getParentFile();
+        if(mp4Dir != null && mp4Dir.exists() && mp4Dir.isDirectory()){
+            this.startRecode(mp4FileName);
+        }else {
+            throw new IllegalArgumentException("传入的mp4文件名不合法!");
+        }
+    }
+    public void recodeStop(){
+        this.stopRecode();
+    }
+    public void setSurfaceTo(Surface surface){
+        this.setSurface(surface);
     }
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         setSurface(holder.getSurface());
-        if(!TextUtils.isEmpty(mUrl)){
-            startVideo(mUrl);
-        }
+//        if(!TextUtils.isEmpty(mUrl)){
+//            startVideo(mUrl);
+//        }
     }
 
     @Override

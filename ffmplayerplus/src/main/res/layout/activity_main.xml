@@ -5,15 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.ffmplayerplus.MainActivity">
+    tools:context="com.example.ffmplayerplus.MainActivity"
+    android:keepScreenOn="true">
 
-    <com.example.ffmplayerplus.FFSurfaceView
-        android:id="@+id/surface_view"
-        android:layout_width="400dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp">
+        <com.example.ffmplayerplus.FFSurfaceView
+            android:id="@+id/surface_view_left"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            />
+        <SurfaceView
+            android:id="@+id/surface_view_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,12 +82,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="截图" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"></View>
             <Button
                 android:id="@+id/btn_luzhi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="录制"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"></View>
+
+            <Button
+                android:id="@+id/btn_exchange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换" />
         </TableRow>
     </TableLayout>
 </LinearLayout>
